@@ -8,8 +8,10 @@
 <body>
     <script>
 
-        fetch("/api-to-do", {
-            method : "DELETE"
+        fetch("/api-to-do/crear", {
+            method : "POST",
+            body : `{"tarea" : ""}`,
+            headers : {"Content-type" : "application/json"}
         })
         .then(respuesta => respuesta.text())
         .then(respuesta => console.log(respuesta))
