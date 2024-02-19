@@ -1,7 +1,7 @@
 require("dotenv").config();
 const express = require("express");
 const {json} = require("body-parser")
-const {getTareas,crearTarea} = require("./db");
+const {getTareas,crearTarea,borrarTarea} = require("./db");
 
 const servidor = express();
 
@@ -50,11 +50,19 @@ servidor.put("/api-to-do",(peticion,respuesta) => {
     respuesta.send("metodo PUT")
 });
 
-servidor.delete("/api-to-do",(peticion,respuesta) => {
+servidor.delete("/api-to-do/borrar/:id",async (peticion,respuesta) => {
 
-    respuesta.send("metodo DELETE")
+        try{
+            let cantidad = await borrarTarea(peticion.params.id)
+            return respuesta.json({resultado : cantidad ? "ok" : "ko"})
 
-});
+        }catch(error){
+            respuesta.status(500);
+            return respuesta.json(error);
+        }
+    }
+
+);
 
 servidor.use((petición,respuesta) => { //es el middleware por defecto
     respuesta.status(404)

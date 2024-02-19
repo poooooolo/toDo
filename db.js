@@ -42,4 +42,22 @@ function crearTarea({tarea}){ // extraigo la tarea de peticion.body
     });
 }
 
-module.exports = {getTareas, crearTarea};
+function borrarTarea(id){
+    return new Promise(async(fulfill,reject)=>{
+        let conexion = conectar();
+        
+        try{
+            let {count} = await conexion `DELETE FROM tareas WHERE id = ${id}`
+            conexion.end();
+
+            fulfill(count)
+        }catch(error){
+
+            reject({error : "error en BBDD"})
+        }
+       
+    })
+    
+
+}
+module.exports = {getTareas, crearTarea, borrarTarea};

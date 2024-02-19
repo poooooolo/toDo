@@ -9,8 +9,8 @@
     <script>
         let tarea = "aprender React"
 
-        fetch("/api-to-do/crear", {
-            method : "POST",
+        fetch("/api-to-do/borrar/2", {
+            method : "DELETE",
             body : JSON.stringify({tarea}),
             headers : {"Content-type" : "application/json"}
         })
