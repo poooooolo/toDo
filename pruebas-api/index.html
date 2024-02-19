@@ -7,10 +7,11 @@
 </head>
 <body>
     <script>
+        let tarea = "aprender React"
 
         fetch("/api-to-do/crear", {
             method : "POST",
-            body : `{"tarea" : ""}`,
+            body : JSON.stringify({tarea}),
             headers : {"Content-type" : "application/json"}
         })
         .then(respuesta => respuesta.text())

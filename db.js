@@ -24,19 +24,19 @@ function getTareas(){
     });
 }
 
-function crearTarea({tarea}){
+function crearTarea({tarea}){ // extraigo la tarea de peticion.body
     return new Promise(async (fulfill,reject) => {
         let conexion = conectar();
 
         try{
-            let [{id}] = await conexion`INSERT INTO tareas (tarea) VALUE (${tarea}) RETURNING id`
+            let [{id}] = await conexion`INSERT INTO tareas (tarea) VALUES (${tarea}) RETURNING id`
 
             conexion.end();
             
             fulfill(id);
 
         }catch(error){
-            reject({error : "bad request"});
+            reject({error : "error en BBDD"});
         }
 
     });
