@@ -9,10 +9,10 @@
     <script>
         let tarea = "aprender React"
 
-        fetch("/api-to-do/borrar/2", {
-            method : "DELETE",
-            body : JSON.stringify({tarea}),
-            headers : {"Content-type" : "application/json"}
+        fetch("/api-to-do/actualizar/1/1", {
+            method : "PUT",
+            // body : JSON.stringify({tarea}),
+            // headers : {"Content-type" : "application/json"}
         })
         .then(respuesta => respuesta.text())
         .then(respuesta => console.log(respuesta))

@@ -1,7 +1,7 @@
 require("dotenv").config();
 const express = require("express");
 const {json} = require("body-parser")
-const {getTareas,crearTarea,borrarTarea} = require("./db");
+const {getTareas,crearTarea,borrarTarea,actualizarEstado,actualizarTexto} = require("./db");
 
 const servidor = express();
 
@@ -45,12 +45,27 @@ servidor.post("/api-to-do/crear", async (peticion,respuesta, siguiente) => {
    
 });
 
-servidor.put("/api-to-do",(peticion,respuesta) => {
-   
-    respuesta.send("metodo PUT")
+servidor.put("/api-to-do/actualizar/:id([0-9]+)/:operacion(1|2)", async (peticion,respuesta) => {
+    let operacion = Number(peticion.params.operacion);
+
+    let operaciones = [actualizarTexto,actualizarEstado];
+
+    let {tarea} = peticion.body;
+
+    if(operacion == 1 && (!tarea || tarea.trim() == "")){
+        return siguiente({ error : "falta el argumento tarea en el objeto JSON" }); 
+    }
+
+    try{
+        let cantidad = await operaciones[operacion - 1](peticion.params.id, operacion == 1 ? tarea : null);
+        respuesta.json({ resultado : cantidad ? "ok" : "ko" });
+    }catch(error){
+        respuesta.status(500);
+        respuesta.json(error);
+    }
 });
 
-servidor.delete("/api-to-do/borrar/:id",async (peticion,respuesta) => {
+servidor.delete("/api-to-do/borrar/:id([0-9]+)",async (peticion,respuesta) => {
 
         try{
             let cantidad = await borrarTarea(peticion.params.id)
