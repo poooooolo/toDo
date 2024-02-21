@@ -11,8 +11,8 @@
 
         fetch("/api-to-do/actualizar/1/1", {
             method : "PUT",
-            // body : JSON.stringify({tarea}),
-            // headers : {"Content-type" : "application/json"}
+            body : JSON.stringify({tarea}),
+            headers : {"Content-type" : "application/json"}
         })
         .then(respuesta => respuesta.text())
         .then(respuesta => console.log(respuesta))
