@@ -45,7 +45,7 @@ servidor.post("/api-to-do/crear", async (peticion,respuesta, siguiente) => {
    
 });
 
-servidor.put("/api-to-do/actualizar/:id([0-9]+)/:operacion(1|2)", async (peticion,respuesta) => {
+servidor.put("/api-to-do/actualizar/:id([0-9]+)/:operacion(1|2)", async (peticion,respuesta,siguiente) => {
     let operacion = Number(peticion.params.operacion);
 
     let operaciones = [actualizarTexto,actualizarEstado];
