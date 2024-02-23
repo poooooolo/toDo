@@ -81,7 +81,7 @@ function actualizarTexto(id,tarea){
             let {count} = await conexion `UPDATE tareas SET tarea = ${tarea} WHERE id = ${id}`
             conexion.end();
             fulfill(count);
-
+            //count cantidad de filas afectadas
         }catch(error){
             reject({error : "error en BBDD"})
         }

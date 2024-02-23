@@ -1,9 +1,12 @@
 require("dotenv").config();
 const express = require("express");
-const {json} = require("body-parser")
+const {json} = require("body-parser");
+const cors = require("cors");
 const {getTareas,crearTarea,borrarTarea,actualizarEstado,actualizarTexto} = require("./db");
 
 const servidor = express();
+
+servidor.use(cors()); //cross origin request
 
 servidor.use(json());//cualquier cosa que venga con content-type json es procesado por body-parser, 
                     //toda petición pasa por aquí porque no tiene ninguna url
@@ -46,17 +49,19 @@ servidor.post("/api-to-do/crear", async (peticion,respuesta, siguiente) => {
 });
 
 servidor.put("/api-to-do/actualizar/:id([0-9]+)/:operacion(1|2)", async (peticion,respuesta,siguiente) => {
-    let operacion = Number(peticion.params.operacion);
-
-    let operaciones = [actualizarTexto,actualizarEstado];
+    let operacion = Number(peticion.params.operacion); //cojo lo que ha escrito la persona en la url y lo guardo como numero en operacion
+    // 1 o 2
+    let operaciones = [actualizarTexto,actualizarEstado]; //almaceno en un array las dos funciones
+    //op1-> actualizar texto, op2-> actualizar estado
 
     let {tarea} = peticion.body;
 
-    if(operacion == 1 && (!tarea || tarea.trim() == "")){
+    //si la operación no es 1 salta al catch
+    if(operacion == 1 && (!tarea || tarea.trim() == "")){ //compruebo tarea en negativo, si falla, me da verdadero, si está es falso
         return siguiente({ error : "falta el argumento tarea en el objeto JSON" }); 
     }
 
-    try{
+    try{// en operacion entra 1 o 2, si es 1 -1 es indice 0 actualizarTexto y si es si es 2 es 2 -1 es indice 1 actualizarEstado
         let cantidad = await operaciones[operacion - 1](peticion.params.id, operacion == 1 ? tarea : null);
         respuesta.json({ resultado : cantidad ? "ok" : "ko" });
     }catch(error){
@@ -99,6 +104,7 @@ servidor.listen(process.env.PORT);//las variables de entorno sivern para guardar
 //si nos hacen una petición POST a /api-todo/crear peticion : {tarea : "texto"} respuesta : {id}
 
 //DELETE /api-todo/borrar/:id
+//respuesta : {resultado : ok|ko}
 
 //PUT a /api-todo/actualizar/:id/:operacion
 
