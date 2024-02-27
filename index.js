@@ -11,6 +11,7 @@ servidor.use(cors()); //cross origin request
 servidor.use(json());//cualquier cosa que venga con content-type json es procesado por body-parser, 
                     //toda petición pasa por aquí porque no tiene ninguna url
 
+servidor.use(express.static("./estaticos"))
 servidor.use(("/pruebas"),express.static("./pruebas-api"))
 
 servidor.get("/api-to-do", async (peticion,respuesta) => {
